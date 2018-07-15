@@ -3,7 +3,6 @@ import win32api
 import win32con
 import re
 
-
 class WindowManipulationManager(object):
 ### See Window Style documentation to get an overview https://docs.microsoft.com/en-us/windows/desktop/winmsg/window-styles
 
