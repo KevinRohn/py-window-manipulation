@@ -121,9 +121,7 @@ class WindowManipulationManager(object):
     def set_defined_style(self):
         win32gui.SetWindowLong(self._handle,win32con.GWL_STYLE,self._style)
         win32gui.SetWindowLong(self._handle,win32con.GWL_EXSTYLE,self._extStyle)
-
-
-      
+        
 w = WindowManipulationManager()
 
 if w.find_window_wildcard(".*SBC*"):
