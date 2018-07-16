@@ -62,7 +62,8 @@ class WindowManipulationManager(object):
 
     # Basic style builder
     def style_builder(self,resizable=None,sysmenu=None,maximizebox=None,minimizebox=None,
-                      closeable=None,border=None,titlebar=None,sizebox=None):
+                      closeable=None,border=None,titlebar=None,sizebox=None,
+                      taskbarIcon=None):
         if resizable is not None:
             if resizable:
                 self._style &= win32con.WS_SIZEBOX
@@ -113,21 +114,20 @@ class WindowManipulationManager(object):
             else:
                 self._style &= ~win32con.WS_SIZEBOX
 
+        if taskbarIcon is not None:
+            if taskbarIcon:
+                self._extStyle &= win32con.WS_EX_TOOLWINDOW
+            else:
+                self._extStyle &= ~win32con.WS_EX_TOOLWINDOW
+
+
     # removes the windows menu bar
     def remove_menubar(self):
         win32gui.SetMenu(self._handle, None)
 
     # set the defined style
     def set_defined_style(self):
+        win32gui.ShowWindow(self._handle, win32con.SW_HIDE)
         win32gui.SetWindowLong(self._handle,win32con.GWL_STYLE,self._style)
         win32gui.SetWindowLong(self._handle,win32con.GWL_EXSTYLE,self._extStyle)
-        
-w = WindowManipulationManager()
-
-if w.find_window_wildcard(".*SBC*"):
-    if w.prepare_style_build():
-        w.style_builder(resizable=False,sysmenu=False,minimizebox=False,maximizebox=False,closeable=False,border=False,titlebar=False,sizebox=False)
-        w.set_defined_style()
-    w.remove_menubar()
-    w.set_foreground()
-    w.set_FullScreen()
+        win32gui.ShowWindow(self._handle,win32con.SW_SHOW)
