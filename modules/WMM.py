@@ -1,6 +1,7 @@
 import win32gui
 import win32api
 import win32con
+import json
 import re
 
 class WindowManipulationManager(object):
@@ -36,7 +37,7 @@ class WindowManipulationManager(object):
             return  
         child_window_list = []  
         win32gui.EnumChildWindows(self._handle, lambda hWnd, param: param.append(hWnd), child_window_list)  
-        return child_window_list 
+        return child_window_list       
 
     # set style build
     def prepare_style_build(self):
@@ -120,10 +121,25 @@ class WindowManipulationManager(object):
             else:
                 self._extStyle &= ~win32con.WS_EX_TOOLWINDOW
 
+    #Get Monitor info
+    def get_info_for_monitor(self, monitor_ID):
+        mon = win32api.EnumDisplayMonitors()
+        moninfo = None
+        try:            
+            moninfo = (win32api.GetMonitorInfo(mon[monitor_ID][0]))
+            moninfodump = json.dumps(moninfo)
+            moninfojsonload = json.loads(moninfodump)
+        except: 
+            print("Monitor ID seems to be like out of the index range")
+        return moninfojsonload
+    
+    def move_window_to_pos(self, position):
+        win32gui.MoveWindow(self._handle,position[0],position[1],position[2],position[3],True)
 
     # removes the windows menu bar
     def remove_menubar(self):
         win32gui.SetMenu(self._handle, None)
+        
 
     # set the defined style
     def set_defined_style(self):
@@ -131,3 +147,10 @@ class WindowManipulationManager(object):
         win32gui.SetWindowLong(self._handle,win32con.GWL_STYLE,self._style)
         win32gui.SetWindowLong(self._handle,win32con.GWL_EXSTYLE,self._extStyle)
         win32gui.ShowWindow(self._handle,win32con.SW_SHOW)
+
+
+class WMMError(Exception):
+    def __init__(self,value):
+        self._value = value
+    def __str__(self):
+        return repr(self._value)
