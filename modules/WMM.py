@@ -135,6 +135,7 @@ class WindowManipulationManager(object):
     
     def move_window_to_pos(self, position):
         win32gui.MoveWindow(self._handle,position[0],position[1],position[2],position[3],True)
+        win32gui.SetWindowPos
 
     # removes the windows menu bar
     def remove_menubar(self):
