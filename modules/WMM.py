@@ -26,10 +26,19 @@ class WindowManipulationManager(object):
     def find_window_wildcard(self, wildcard):
         self._handle = None
         win32gui.EnumWindows(self._window_enum_callback, wildcard)
+        print(self._handle)
         if self._handle is not None:
             return True
         else:
             return False
+
+    # return the handler
+    def get_handle(self):
+        return self._handle
+    
+    # set a window title
+    def set_window_title(self,title=""):
+        win32gui.SetWindowText(self._handle, title)
 
     # get all child windows
     def get_child_windows(self):
