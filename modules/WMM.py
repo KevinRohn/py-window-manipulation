@@ -130,7 +130,7 @@ class WindowManipulationManager(object):
             else:
                 self._extStyle &= ~win32con.WS_EX_TOOLWINDOW
 
-    #Get Monitor info
+    # get Monitor info
     def get_info_for_monitor(self, monitor_ID):
         mon = win32api.EnumDisplayMonitors()
         moninfo = None
@@ -142,6 +142,7 @@ class WindowManipulationManager(object):
             print("Monitor ID seems to be like out of the index range")
         return moninfojsonload
     
+    # move window to given position
     def move_window_to_pos(self, position):
         win32gui.MoveWindow(self._handle,position[0],position[1],position[2],position[3],True)
         win32gui.SetWindowPos
